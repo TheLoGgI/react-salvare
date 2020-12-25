@@ -1,0 +1,46 @@
+:root {
+    --logo-size: 50px;
+}
+
+.logo {
+    width: var(--logo-size);
+    height: var(--logo-size);
+    border: calc(var(--logo-size) * 0.05) white solid ;
+    border-radius: 50%;
+    color: white;
+    position: relative;
+}
+
+.logo::before {
+    content: 'S';
+    position: absolute;
+    top: calc(var(--logo-size) * 0.45);;
+    left: calc(var(--logo-size) * 0.35);;
+    transform: translate(-50%, -50%);
+    font-size: calc(var(--logo-size) * 0.8);
+    font-style: italic;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.logo::after {
+    content: 'v';
+    position: absolute;
+    top: 50%;
+    left: 70%;
+    transform: translate(-50%, -50%);
+    font-size: calc(var(--logo-size) * 0.6);
+    font-style: italic;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.bold  {
+    font-weight: bold !important;
+    text-transform: capitalize;
+    font-size: 1em;
+    font-family: 'Montserrat', sans-serif;
+}
+.firm-name {
+    font-size: 1em;
+    font-family: 'Montserrat', sans-serif;
+}
+
