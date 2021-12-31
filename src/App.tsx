@@ -1,78 +1,78 @@
-import React, { useState } from 'react';
-import './App.css';
-import './css/logo.css';
-import './css/header.css';
-import './css/hero.css';
-import Container from './components/container';
-import Search from './components/search';
+import "./css/logo.css"
 
+import { Box, Image, SimpleGrid, Text } from "@chakra-ui/react"
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { useState } from "react"
+import { Link, Outlet, useParams } from "react-router-dom"
 
+import Card from "./components/Card"
+import Search from "./components/Search"
+import { useIngredientData } from "./context/DataContext"
 
-
-
-function Header() {
-  console.log('Header rerender');
-  
-
-  return (
-    <header>
-      <nav>
-        <div>
-          <div className="logo"></div>
-        </div>
-        <div className="share">
-          <div className="share_icon">
-            <img src="icons/share-arrow.png" alt="share details" />
-          </div>
-          <div className="share_icon">
-            <img src="icons/social-media-share-icon.png" alt="social Media" />
-          </div>
-          <div className="share_icon">
-            <img src="icons/print-icon.png" alt="print" />
-          </div>
-        </div>
-
-      </nav>
-    </header>
-  )
-}
-
-function Hero() {
-  console.log('Hero rerender');
-  
-  return (
-    <div className="hero">
-      <h1 className="hero__heading">Find the best Ingredients and Recipes for your meals </h1>
-      <p className="hero__paragrath">Find your daily calorie intake and let us help you figure out what to eat, by searching for ingredients or recipes</p>
-      <button className="hero__btn">Start Today</button>
-    </div>
-  )
+function EmptySearchMessage() {
+    return (
+        <>
+            <Text fontSize="3xl" color="blue.50">
+                Find your ingredients or recipes for your next meal
+            </Text>
+            <Image src="recipies.example.png" alt="recipies example" />
+        </>
+    )
 }
 
 function App() {
-  console.log('App rerender');
-  
-  const [input, setInput] = useState<string|null>(null)
-  const [onSubmit, toggle] = useState<boolean>(false)
-  
-  
-  return (
-    <div className="App">
-      <Header />
-      <Hero />
-      <section className="grid__ingredients">
-        <div className="grid-col pad-1">
-          <Search setInput={setInput} toggle={toggle} />
-          {/* <Search setInput={setInput} toggle={toggle} /> */}
-          {/* <Container searchParam={input} isSubmitted={onSubmit} /> */}
-        </div>
-        <div className="grid-col">
-          <img className="user-image" src="https://via.placeholder.com/600/771796" alt="placeholder image" />
-        </div>
-      </section>
-      
-    </div>
-  );
+    const { id } = useParams()
+    const [searchInput, setSearchInput] = useState("")
+    const { data } = useIngredientData(searchInput)
+    console.log("data: ", data)
+
+    return (
+        <Box as="main" bg="#1A2C33" minH="100vh">
+            <Search searchInput={searchInput} setSearchInput={setSearchInput} />
+
+            <Box p="4">
+                {data?.length === 0 ? <EmptySearchMessage /> : null}
+
+                {!id ? (
+                    <SimpleGrid autoColumns="true" columns={4} spacing={10}>
+                        {data?.map((item, index) => {
+                            const label = item.food.label
+                            const image = item.food.image
+                            const id = item.food.foodId
+                            return (
+                                <Card
+                                    key={index + id}
+                                    ingredientId={id}
+                                    image={image}
+                                    label={label}
+                                    alt={label}
+                                />
+                            )
+                        })}
+                    </SimpleGrid>
+                ) : (
+                    <Link to="/">
+                        <FontAwesomeIcon
+                            size="3x"
+                            color="#B4DCEC"
+                            icon={faArrowLeft}
+                        />
+                    </Link>
+                )}
+            </Box>
+
+            <Outlet />
+
+            <Box
+                w="100%"
+                h={400}
+                mt={200}
+                bgImage="url('salvaregrid.png')"
+                bgSize="110%"
+            ></Box>
+        </Box>
+    )
 }
 
-export default App;
+export default App
