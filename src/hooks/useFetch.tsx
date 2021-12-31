@@ -1,15 +1,6 @@
 import { useEffect, useState } from "react"
 
-export type OptionRequestType = Pick<
-    Request,
-    "method" | "mode" | "cache" | "headers"
->
-export type useFetchType<DataType> = {
-    data: DataType | undefined
-    isFetching: boolean
-    isFetched: boolean
-    error: string | null
-}
+import { useFetchType } from "../types/useFetch"
 
 export default function useFetch<T>(
     url: string,

@@ -1,40 +1,11 @@
 import { Url } from "url"
 
-import useFetch, { useFetchType } from "./useFetch"
-
-export type FoodDatabseHintsFoodType = {
-    foodId: string
-    label: string
-    nutrients: {
-        ENERC_KCAL: number
-        PROCNT: number
-        FAT: number
-        CHOCDF: number
-        FIBTG: number
-    }
-    category: string
-    categoryLabel: string
-    image: Url
-}
-
-export type FoodDataHintsType = {
-    food: FoodDatabseHintsFoodType
-    measures: []
-}
-
-export type FoodDataType = {
-    text: string
-    parsed: []
-    hints: FoodDataHintsType[]
-    _links: {}
-}
-
-export type useFoodRequest<T> = Omit<
-    useFetchType<FoodDataHintsType[]>,
-    "data"
-> & {
-    data: T
-}
+import {
+    FoodDataHintsType,
+    FoodDataType,
+    useFoodRequest,
+} from "../types/ingredients"
+import useFetch from "./useFetch"
 
 export function useRecipies(search: string) {
     const url = `https://api.edamam.com/api/recipes/v2?type=public&q=${search}&app_id=a925abe5&app_key=54dc6200ceb063b6dc6a39a8454d0a36`

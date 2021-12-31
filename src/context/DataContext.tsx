@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react"
 
-import { useFoodRequest } from "../hooks/useRequests"
-import { FoodDataHintsType, useFood } from "../hooks/useRequests"
+import { useFood } from "../hooks/useRequests"
+import { FoodDataHintsType, useFoodRequest } from "../types/ingredients"
 import { ContextProviderProps } from "./ThemeContext"
 
 type SetDataContext<T> = React.Dispatch<T>

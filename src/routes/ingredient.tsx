@@ -3,7 +3,7 @@ import { useContext, useEffect } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 
 import { MaterialContext } from "../context/DataContext"
-import { FoodDataHintsType } from "../hooks/useRequests"
+import { FoodDataHintsType } from "../types/ingredients"
 
 // import Search from '../components/Search';
 

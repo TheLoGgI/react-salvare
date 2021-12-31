@@ -25,7 +25,6 @@ function App() {
     const { id } = useParams()
     const [searchInput, setSearchInput] = useState("")
     const { data } = useIngredientData(searchInput)
-    console.log("data: ", data)
 
     return (
         <Box as="main" bg="#1A2C33" minH="100vh">
