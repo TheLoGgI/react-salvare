@@ -9,6 +9,8 @@ import { Link, Outlet, useParams } from "react-router-dom"
 import Card from "./components/Card"
 import Search from "./components/Search"
 import { useIngredientData } from "./context/DataContext"
+import { useRecipies } from "./hooks/useRequests"
+import { SearchStateType } from "./types/search"
 
 function EmptySearchMessage() {
     return (
@@ -23,15 +25,23 @@ function EmptySearchMessage() {
 
 function App() {
     const { id } = useParams()
-    const [searchInput, setSearchInput] = useState("")
-    const { data } = useIngredientData(searchInput)
+    const [searchSettings, setSearchSettings] = useState<SearchStateType>({
+        searchInput: "",
+        selectedButton: "ingredients",
+    })
+    const { data } = useIngredientData(searchSettings.searchInput)
+    const { data: recipiesData } = useRecipies(searchSettings.searchInput)
+    console.log("recipiesData: ", recipiesData)
 
     return (
         <Box as="main" bg="#1A2C33" minH="100vh">
-            <Search searchInput={searchInput} setSearchInput={setSearchInput} />
+            <Search
+                searchSettings={searchSettings}
+                setSearchSettings={setSearchSettings}
+            />
 
             <Box p="4">
-                {data?.length === 0 ? <EmptySearchMessage /> : null}
+                {data?.length === 0 && <EmptySearchMessage />}
 
                 {!id ? (
                     <SimpleGrid autoColumns="true" columns={4} spacing={10}>

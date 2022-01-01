@@ -10,34 +10,19 @@ import {
 } from "@chakra-ui/react"
 import { faCarrot, faUtensils } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import React, { useReducer, useState } from "react"
+import React, { useState } from "react"
 
-type UnionActionType = "ingredients" | "recipies"
-type StateReducerType = { ingredients: boolean; recipies: boolean }
-type SearchInputProps = {
-    setSearchInput: (value: string) => void
-    searchInput: string
-}
+import { SearchInputProps, UnionActionType } from "../types/search"
 
-function Search({ setSearchInput, searchInput }: SearchInputProps) {
+function Search({ setSearchSettings }: SearchInputProps) {
     const ACTIONS = {
         INGREDIENTS: "ingredients",
         RECIPIES: "recipies",
     }
-    const initialState = { ingredients: true, recipies: false }
 
-    function reducer(state: StateReducerType, action: UnionActionType) {
-        switch (action) {
-            case ACTIONS.INGREDIENTS:
-                return { ingredients: true, recipies: false }
-            case ACTIONS.RECIPIES:
-                return { ingredients: false, recipies: true }
-            default:
-                return state
-        }
-    }
-
-    const [buttonState, dispatch] = useReducer(reducer, initialState)
+    const [buttonState, setButtonState] = useState<UnionActionType>(
+        ACTIONS.INGREDIENTS as UnionActionType
+    )
     const [inputValue, setInputValue] = useState("")
 
     return (
@@ -47,10 +32,16 @@ function Search({ setSearchInput, searchInput }: SearchInputProps) {
                     colorScheme="teal"
                     height={16}
                     leftIcon={<FontAwesomeIcon icon={faCarrot} />}
-                    bg={buttonState?.ingredients ? "teal" : "teal.800"}
-                    fontWeight={buttonState?.ingredients ? "bold" : "initial"}
+                    bg={
+                        buttonState === ACTIONS.INGREDIENTS
+                            ? "teal"
+                            : "teal.800"
+                    }
+                    fontWeight={
+                        buttonState === ACTIONS.INGREDIENTS ? "bold" : "initial"
+                    }
                     onClick={() =>
-                        dispatch(ACTIONS.INGREDIENTS as UnionActionType)
+                        setButtonState(ACTIONS.INGREDIENTS as UnionActionType)
                     }
                 >
                     <Text ml="4">Ingredients</Text>
@@ -59,10 +50,12 @@ function Search({ setSearchInput, searchInput }: SearchInputProps) {
                     colorScheme="teal"
                     height={16}
                     leftIcon={<FontAwesomeIcon icon={faUtensils} />}
-                    bg={buttonState?.recipies ? "teal" : "teal.800"}
-                    fontWeight={buttonState?.recipies ? "bold" : "initial"}
+                    bg={buttonState === ACTIONS.RECIPIES ? "teal" : "teal.800"}
+                    fontWeight={
+                        buttonState === ACTIONS.RECIPIES ? "bold" : "initial"
+                    }
                     onClick={() =>
-                        dispatch(ACTIONS.RECIPIES as UnionActionType)
+                        setButtonState(ACTIONS.RECIPIES as UnionActionType)
                     }
                 >
                     <Text ml="4">Recipies</Text>
@@ -71,7 +64,10 @@ function Search({ setSearchInput, searchInput }: SearchInputProps) {
             <form
                 onSubmit={(e) => {
                     e.preventDefault()
-                    setSearchInput(inputValue)
+                    setSearchSettings({
+                        searchInput: inputValue,
+                        selectedButton: buttonState,
+                    })
                 }}
             >
                 <HStack>

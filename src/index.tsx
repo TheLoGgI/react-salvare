@@ -7,10 +7,12 @@ import { BrowserRouter, Route, Routes } from "react-router-dom"
 
 import App from "./App"
 import Header from "./components/Header"
-import DataContext from "./context/DataContext"
+// import DataContext from "./context/DataContext"
 import ThemeContext from "./context/ThemeContext"
 import IngredientsPage from "./routes/ingredient"
 import RecipesPage from "./routes/recipes"
+
+const DataContext = React.lazy(() => import("./context/DataContext"))
 
 ReactDOM.render(
     <React.StrictMode>

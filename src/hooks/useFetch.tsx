@@ -6,7 +6,7 @@ export default function useFetch<T>(
     url: string,
     options?: RequestInit
 ): useFetchType<T> {
-    const [data, setData] = useState<T | undefined>(undefined)
+    const [data, setData] = useState<T | null>(null)
     const [isFetching, setIsFetching] = useState(false)
     const [isFetched, setIsFetched] = useState(false)
     const [error, setError] = useState<string | null>(null)

@@ -3,7 +3,7 @@ export type OptionRequestType = Pick<
     "method" | "mode" | "cache" | "headers"
 >
 export type useFetchType<DataType> = {
-    data: DataType | undefined
+    data: DataType | null
     isFetching: boolean
     isFetched: boolean
     error: string | null
