@@ -14,7 +14,7 @@ import React, { useState } from "react"
 
 import { SearchInputProps, UnionActionType } from "../types/search"
 
-function Search({ setSearchSettings }: SearchInputProps) {
+function Search({ setSearchSettings, isLoading }: SearchInputProps) {
     const ACTIONS = {
         INGREDIENTS: "ingredients",
         RECIPIES: "recipies",
@@ -24,6 +24,14 @@ function Search({ setSearchSettings }: SearchInputProps) {
         ACTIONS.INGREDIENTS as UnionActionType
     )
     const [inputValue, setInputValue] = useState("")
+
+    function searchToggle(action: UnionActionType) {
+        setButtonState(action)
+        setSearchSettings({
+            searchInput: inputValue,
+            selectedButton: action,
+        })
+    }
 
     return (
         <HStack spacing={4} p={[2, 4]}>
@@ -41,7 +49,7 @@ function Search({ setSearchSettings }: SearchInputProps) {
                         buttonState === ACTIONS.INGREDIENTS ? "bold" : "initial"
                     }
                     onClick={() =>
-                        setButtonState(ACTIONS.INGREDIENTS as UnionActionType)
+                        searchToggle(ACTIONS.INGREDIENTS as UnionActionType)
                     }
                 >
                     <Text ml="4">Ingredients</Text>
@@ -55,7 +63,7 @@ function Search({ setSearchSettings }: SearchInputProps) {
                         buttonState === ACTIONS.RECIPIES ? "bold" : "initial"
                     }
                     onClick={() =>
-                        setButtonState(ACTIONS.RECIPIES as UnionActionType)
+                        searchToggle(ACTIONS.RECIPIES as UnionActionType)
                     }
                 >
                     <Text ml="4">Recipies</Text>
@@ -92,7 +100,7 @@ function Search({ setSearchSettings }: SearchInputProps) {
                     <Button
                         mt={4}
                         colorScheme="teal"
-                        isLoading={false}
+                        isLoading={isLoading}
                         cursor="pointer"
                         alignSelf="flex-end"
                         type="submit"

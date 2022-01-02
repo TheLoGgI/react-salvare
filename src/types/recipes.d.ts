@@ -1,6 +1,6 @@
 import { Url } from "url"
 
-type Nutrients = {
+export type Nutrients = {
     label: string
     tag: string
     schemaOrgTag: string
@@ -11,8 +11,9 @@ type Nutrients = {
     sub?: Nutrients[]
 }
 
-type RecipesDataHints = {
+export type RecipesDataHints = {
     recipe: {
+        id?: string
         uri: Url
         label: string
         image: Url
@@ -43,6 +44,13 @@ type RecipesDataHints = {
         yield: number
         dietLabels: []
         healthLabels: string[]
+        totalNutrients: {
+            [Nutrient: string]: {
+                label: string
+                quantity: number
+                unit: string
+            }
+        }
         ingredientLines: string[]
         ingredients: Array<{
             text: string
@@ -64,7 +72,7 @@ type RecipesDataHints = {
     }
 }
 
-type RecipesData = {
+export type RecipesData = {
     from: number
     to: number
     count: number

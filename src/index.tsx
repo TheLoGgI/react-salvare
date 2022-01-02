@@ -30,7 +30,7 @@ ReactDOM.render(
                                     />
                                 </Route>
                                 <Route
-                                    path="recipes"
+                                    path="recipes/:id"
                                     element={<RecipesPage />}
                                 />
                             </Routes>

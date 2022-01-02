@@ -11,4 +11,5 @@ export type SearchInputProps = {
         searchInput: string
         selectedButton: UnionActionType
     }
+    isLoading?: boolean
 }

@@ -2,38 +2,22 @@ import { Box, Flex, Heading, List, ListItem, Text } from "@chakra-ui/react"
 import { useContext, useEffect } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 
-import { MaterialContext } from "../context/DataContext"
+import { MetricListItem } from "../components/MetricListItem"
+import { FoodDataContext } from "../context/DataContext"
 import { FoodDataHintsType } from "../types/ingredients"
 
 // import Search from '../components/Search';
 
-type MetricItemType = {
-    type: string
-    unit?: string
-    metric: number | undefined
-}
-
-function MetricListItem({ type, metric, unit }: MetricItemType) {
-    return (
-        <ListItem borderBottom="2px dashed lightgray">
-            <Flex justify="space-between" py="2">
-                <Text>{type}:</Text>
-                {metric?.toFixed(2)} {unit}
-            </Flex>
-        </ListItem>
-    )
-}
-
 function Ingredients() {
     const { id } = useParams()
-    const navigate = useNavigate()
-    const ingredientData = useContext<Array<FoodDataHintsType>>(MaterialContext)
+    // const navigate = useNavigate()
+    const ingredientData = useContext<Array<FoodDataHintsType>>(FoodDataContext)
 
-    useEffect(() => {
-        if (ingredientData === null || ingredientData.length === 0) {
-            navigate("/")
-        }
-    }, [ingredientData, navigate])
+    // useEffect(() => {
+    //     if (ingredientData === null || ingredientData.length === 0) {
+    //         navigate("/")
+    //     }
+    // }, [ingredientData, navigate])
 
     const currentIngredient = ingredientData?.find(
         (ingredient) => ingredient.food.foodId === id

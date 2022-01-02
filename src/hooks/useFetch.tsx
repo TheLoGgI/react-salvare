@@ -28,8 +28,8 @@ export default function useFetch<T>(
 
         fetch(url, options)
             .then((response) => {
+                setIsFetching(false)
                 if (response.ok) {
-                    setIsFetching(false)
                     return response.json()
                 } else {
                     setError(response.statusText)
