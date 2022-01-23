@@ -1,5 +1,18 @@
 import { Url } from "url"
 
+export type RecipeImagesObjectType = {
+    url: Url
+    width: number
+    height: number
+}
+
+export type RecipesImages = {
+    THUMBNAIL: RecipeImagesObjectType
+    SMALL: RecipeImagesObjectType
+    REGULAR: RecipeImagesObjectType
+    LARGE?: RecipeImagesObjectType
+}
+
 export type Nutrients = {
     label: string
     tag: string
@@ -11,12 +24,24 @@ export type Nutrients = {
     sub?: Nutrients[]
 }
 
+export type RecipiesIngredients = {
+    text: string
+    quantity: number
+    food: string
+    weight: number
+    measure: string | number
+    foodCategory: string
+    foodId: string
+    image: Url
+}
+
 export type RecipesDataHints = {
     recipe: {
         id?: string
         uri: Url
         label: string
         image: Url
+        totalTime: number
         images: {
             THUMBNAIL: {
                 url: Url
@@ -33,7 +58,7 @@ export type RecipesDataHints = {
                 width: number
                 height: number
             }
-            LARGE: {
+            LARGE?: {
                 url: Url
                 width: number
                 height: number
@@ -52,15 +77,7 @@ export type RecipesDataHints = {
             }
         }
         ingredientLines: string[]
-        ingredients: Array<{
-            text: string
-            quantity: number
-            food: string
-            weight: number
-            foodCategory: string
-            foodId: string
-            image: Url
-        }>
+        ingredients: RecipiesIngredients[]
         calories: number
         digest: Nutrients
     }

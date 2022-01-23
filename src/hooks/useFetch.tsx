@@ -32,12 +32,15 @@ export default function useFetch<T>(
                 if (response.ok) {
                     return response.json()
                 } else {
-                    setError(response.statusText)
-                    // throw Error('Something went wrong with the fetch')
+                    // setError(response.statusText)
+                    throw Error("Something went wrong with the fetch")
                 }
             })
             .then((data) => {
                 setData(data)
+            })
+            .catch((error) => {
+                setError(error.statusText)
             })
             .finally(() => {
                 setIsFetched(true)

@@ -46,7 +46,6 @@ export function useRecipies(search: string): useFoodRequest<RecipesData> {
         hit.recipe.id = (hit.recipe.uri as unknown as string).split("#")[1]
         return hit
     })
-    console.log("mappedHits: ", mappedHits)
 
     return { data: { ...recipiesData, hits: mappedHits }, ...rest }
 }

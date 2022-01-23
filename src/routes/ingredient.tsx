@@ -1,12 +1,10 @@
-import { Box, Flex, Heading, List, ListItem, Text } from "@chakra-ui/react"
+import { Box, Heading, List, Text } from "@chakra-ui/react"
 import { useContext, useEffect } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 
 import { MetricListItem } from "../components/MetricListItem"
 import { FoodDataContext } from "../context/DataContext"
 import { FoodDataHintsType } from "../types/ingredients"
-
-// import Search from '../components/Search';
 
 function Ingredients() {
     const { id } = useParams()

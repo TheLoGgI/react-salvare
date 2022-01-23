@@ -28,11 +28,11 @@ ReactDOM.render(
                                         path=":id"
                                         element={<IngredientsPage />}
                                     />
+                                    <Route
+                                        path="recipes/:id"
+                                        element={<RecipesPage />}
+                                    />
                                 </Route>
-                                <Route
-                                    path="recipes/:id"
-                                    element={<RecipesPage />}
-                                />
                             </Routes>
                         </BrowserRouter>
                     </DataContext>

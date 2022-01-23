@@ -1,6 +1,6 @@
 import "./css/logo.css"
 
-import { Box, Image, SimpleGrid, Text } from "@chakra-ui/react"
+import { Box, HStack, Image, SimpleGrid, Text } from "@chakra-ui/react"
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useState } from "react"
@@ -28,12 +28,8 @@ function App() {
         searchInput: "",
         selectedButton: "ingredients",
     })
-    console.log("searchSettings: ", searchSettings)
-    // const { data, isFetching } = useIngredientData(searchSettings.searchInput)
-    const isFetching = false
-    const data: any[] = []
+    const { data, isFetching } = useIngredientData(searchSettings.searchInput)
     const { data: recipiesData } = useRecipesData(searchSettings.searchInput)
-    console.log("recipiesData: ", recipiesData)
 
     return (
         <>
@@ -99,11 +95,16 @@ function App() {
                         )
                     ) : (
                         <Link to="/">
-                            <FontAwesomeIcon
-                                size="3x"
-                                color="#B4DCEC"
-                                icon={faArrowLeft}
-                            />
+                            <HStack spacing={4} d="inline-block">
+                                <FontAwesomeIcon
+                                    size="3x"
+                                    color="#B4DCEC"
+                                    icon={faArrowLeft}
+                                />
+                                <Text fontSize="2xl" color="white">
+                                    Go back
+                                </Text>
+                            </HStack>
                         </Link>
                     )}
                 </Box>

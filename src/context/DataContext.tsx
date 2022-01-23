@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react"
 
 import { useFood, useRecipies } from "../hooks/useRequests"
-import recipes from "../routes/recipes"
 import { FoodDataHintsType, useFoodRequest } from "../types/ingredients"
 import { RecipesData } from "../types/recipes"
 import { ContextProviderProps } from "./ThemeContext"
@@ -42,7 +41,9 @@ export function useIngredientData(
     const setData = useContext(UpdateFoodDataContext)
 
     useEffect(() => {
-        setData(data)
+        if (searchInput !== "") {
+            setData(data)
+        }
     }, [data, searchInput, setData])
 
     return { data, ...rest }
@@ -52,10 +53,14 @@ export function useRecipesData(
     searchInput: string
 ): useFoodRequest<RecipesData> {
     const { data, ...rest } = useRecipies(searchInput)
+    console.log("data: ", data)
     const setData = useContext(UpdateRecipesDataContext)
 
     useEffect(() => {
-        setData(data)
+        console.log("searchInput: ", searchInput)
+        if (searchInput !== "") {
+            setData(data)
+        }
     }, [data, searchInput, setData])
 
     return { data, ...rest }
