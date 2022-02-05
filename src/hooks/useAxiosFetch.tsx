@@ -1,54 +1,57 @@
-// import axios, { AxiosRequestConfig, Method } from "axios"
-// import { useEffect, useState } from "react"
+import axios, { AxiosRequestConfig, Method, Requ } from "axios"
+import { useEffect, useState } from "react"
 
-// import { useFetchType } from "../types/useFetch"
-export {}
-// export default function useAxiosFetch<T>(
-//     url?: string,
-//     options?: RequestInit
-// ): useFetchType<T> {
-//     const [data, setData] = useState<T | null>(null)
-//     const [isFetching, setIsFetching] = useState(false)
-//     const [isFetched, setIsFetched] = useState(false)
-//     const [error, setError] = useState<string | null>(null)
+import { useFetchType } from "../types/useFetch"
 
-//     const fetchData = (url: string, customOptions: RequestInit = {}) => {
-//         setIsFetching(true)
+export default function useAxiosFetch<T>(
+    url: string,
+    options?: RequestInit
+): useFetchType<T> {
+    const [data, setData] = useState<T | null>(null)
+    const [isFetching, setIsFetching] = useState(false)
+    const [isFetched, setIsFetched] = useState(false)
+    const [error, setError] = useState<string | null>(null)
 
-//         const config: AxiosRequestConfig<RequestInit> = {
-//             method: "GET",
-//             mode: "cors",
-//             cache: "no-cache",
-//             url: url,
-//             headers: {
-//                 "Content-Type": "application/json",
-//             },
-//             ...customOptions,
-//             // data: data,
-//         }
+    const axiosFetch = (url: string, customOptions = {}) => {
+        setIsFetching(true)
 
-//         axios(config)
-//             .then(function (response) {
-//                 console.log(JSON.stringify(response.data))
-//                 setData(response)
-//             })
-//             .catch(function (error) {
-//                 console.log(error)
-//                 setError(error.statusText)
-//             })
-//             .finally(() => {
-//                 setIsFetched(true)
-//             })
-//     }
+        const config = customOptions
+            ? customOptions
+            : {
+                  method: "GET",
+                  mode: "cors",
+                  cache: "no-cache",
+                  headers: new Headers({
+                      "Content-Type": "application/json",
+                      Accept: "application/json",
+                      "Access-Control-Allow-Headers": "Content-Type",
+                  }),
+              }
 
-//     useEffect(() => {
-//         fetchData(url, options)
-//     }, [options, url])
+        axios(config)
+            .then(function (response) {
+                setData(response.data)
+            })
+            .catch(function (error) {
+                console.log(error)
+                setError(error.statusText)
+            })
+            .finally(() => {
+                setIsFetched(true)
+            })
+    }
 
-//     return {
-//         data,
-//         isFetching,
-//         isFetched,
-//         error,
-//     }
-// }
+    useEffect(() => {
+        if (typeof url === "string" && url) {
+            axiosFetch(url, options)
+        } else if (Array.isArray(url)) {
+        }
+    }, [options, url])
+
+    return {
+        data,
+        isFetching,
+        isFetched,
+        error,
+    }
+}
