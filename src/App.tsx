@@ -1,6 +1,6 @@
 import "./css/logo.css"
 
-import { Box, HStack, Image, SimpleGrid, Text } from "@chakra-ui/react"
+import { Box, Button, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react"
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useState } from "react"
@@ -29,7 +29,15 @@ function App() {
         selectedButton: "ingredients",
     })
     const { data, isFetching } = useIngredientData(searchSettings.searchInput)
-    const { data: recipiesData } = useRecipesData(searchSettings.searchInput)
+    const { data: recipiesData, next: nextRecipiePage } = useRecipesData(
+        searchSettings.searchInput,
+        true
+    )
+    // console.log("recipiesData: ", recipiesData)
+
+    function paginatePage() {
+        nextRecipiePage()
+    }
 
     return (
         <>
@@ -68,43 +76,61 @@ function App() {
                                 })}
                             </SimpleGrid>
                         ) : (
-                            <SimpleGrid
-                                autoColumns="true"
-                                columns={4}
-                                spacing={10}
-                            >
-                                {recipiesData.hits?.map((item) => {
-                                    const label = item.recipe.label
-                                    // const calories = item.recipe.calories
-                                    const image = item.recipe.image
-                                    const id = (
-                                        item.recipe.uri as unknown as string
-                                    ).split("#")[1]
+                            <>
+                                <SimpleGrid
+                                    autoColumns="true"
+                                    columns={4}
+                                    spacing={10}
+                                >
+                                    {recipiesData.hits?.map((item, index) => {
+                                        const label = item.recipe.label
+                                        const image = item.recipe.image
+                                        const id = (
+                                            item.recipe.uri as unknown as string
+                                        ).split("#")[1]
 
-                                    return (
-                                        <Card
-                                            key={id}
-                                            pageLink={"recipes/" + id}
-                                            image={image}
-                                            label={label}
-                                            alt={label}
-                                        />
-                                    )
-                                })}
-                            </SimpleGrid>
+                                        return (
+                                            <Card
+                                                key={id + index}
+                                                pageLink={"recipes/" + id}
+                                                image={image}
+                                                label={label}
+                                                alt={label}
+                                            />
+                                        )
+                                    })}
+                                </SimpleGrid>
+                                {recipiesData.hits?.length !== 0 && (
+                                    <Button
+                                        colorScheme="teal"
+                                        size="lg"
+                                        mx="auto"
+                                        mt="8"
+                                        isLoading={isFetching}
+                                        onClick={paginatePage}
+                                        d="block"
+                                    >
+                                        Show more
+                                    </Button>
+                                )}
+                            </>
                         )
                     ) : (
                         <Link to="/">
-                            <HStack spacing={4} d="inline-block">
+                            <Flex align="center" gap="4">
                                 <FontAwesomeIcon
                                     size="3x"
                                     color="#B4DCEC"
                                     icon={faArrowLeft}
                                 />
-                                <Text fontSize="2xl" color="white">
+                                <Text
+                                    fontSize="2xl"
+                                    verticalAlign="center"
+                                    color="white"
+                                >
                                     Go back
                                 </Text>
-                            </HStack>
+                            </Flex>
                         </Link>
                     )}
                 </Box>

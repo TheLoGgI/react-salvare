@@ -10,6 +10,7 @@ import Header from "./components/Header"
 // import DataContext from "./context/DataContext"
 import ThemeContext from "./context/ThemeContext"
 import IngredientsPage from "./routes/ingredient"
+import ProfilPage from "./routes/profil"
 import RecipesPage from "./routes/recipes"
 
 const DataContext = React.lazy(() => import("./context/DataContext"))
@@ -33,6 +34,7 @@ ReactDOM.render(
                                         element={<RecipesPage />}
                                     />
                                 </Route>
+                                <Route path="profil" element={<ProfilPage />} />
                             </Routes>
                         </BrowserRouter>
                     </DataContext>

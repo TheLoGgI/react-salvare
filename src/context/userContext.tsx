@@ -27,8 +27,9 @@ export default function UserMongoContext({ children }: ContextProviderProps) {
 }
 
 export function useRealmApp() {
-    return new Realm.App({ id: "salvare-foodapp-iwodd" })
+    return Realm.App.getApp("salvare-foodapp-iwodd")
 }
+
 export function useCurrentUser() {
     const app = new Realm.App({ id: "salvare-foodapp-iwodd" })
     return app.currentUser

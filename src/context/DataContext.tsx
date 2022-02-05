@@ -50,14 +50,13 @@ export function useIngredientData(
 }
 
 export function useRecipesData(
-    searchInput: string
+    searchInput: string,
+    accumaltivePagination: boolean
 ): useFoodRequest<RecipesData> {
-    const { data, ...rest } = useRecipies(searchInput)
-    console.log("data: ", data)
+    const { data, ...rest } = useRecipies(searchInput, accumaltivePagination)
     const setData = useContext(UpdateRecipesDataContext)
 
     useEffect(() => {
-        console.log("searchInput: ", searchInput)
         if (searchInput !== "") {
             setData(data)
         }

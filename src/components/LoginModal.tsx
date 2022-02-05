@@ -1,3 +1,5 @@
+import assert from "assert"
+
 import {
     Box,
     Button,
@@ -23,7 +25,7 @@ import { SubmitHandler, useForm } from "react-hook-form"
 import * as Realm from "realm-web"
 
 // Realm.getApp().logout()
-import { useCurrentUser } from "../context/userContext"
+import { useCurrentUser, useRealmApp } from "../context/userContext"
 
 type ModalProps = {
     isOpen: boolean
@@ -37,25 +39,35 @@ type Inputs = {
     password: string
 }
 
-async function useMongoAnonymousConnect() {
+function useAnonymousLogin() {
     const app = new Realm.App({ id: "salvare-foodapp-iwodd" })
 
     const credentials = Realm.Credentials.anonymous()
-    console.log("credentials: ", credentials)
 
-    try {
-        const user = await app.logIn(credentials)
-        const insertUser = await user.functions.insertUser({
-            username: "Lasse Aakjær",
-            email: "lasse_aakjaer@hotmail.com",
-        })
-        console.log("insertUser: ", insertUser)
-        console.log("user: ", user)
-        const usersData = await user.functions.getUsers()
-        console.log("usersData: ", usersData)
-    } catch (err) {
-        console.error("Failed to log in", err)
-    }
+    useEffect(() => {
+        app.logIn(credentials)
+            .then((user) => {
+                console.log(user)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
+    return app.currentUser
+}
+
+export async function linkAccounts(
+    user: Realm.User,
+    email: string,
+    password: string
+) {
+    const emailPasswordUserCredentials = Realm.Credentials.emailPassword(
+        email,
+        password
+    )
+    await user.linkCredentials(emailPasswordUserCredentials)
 }
 
 function LoginContent(props: {
@@ -69,9 +81,9 @@ function LoginContent(props: {
         formState: { errors },
     } = useForm<Inputs>()
     const [show, setShow] = useBoolean()
+    const app = useRealmApp()
 
     const onSubmit: SubmitHandler<Inputs> = async (data) => {
-        const app = new Realm.App({ id: "salvare-foodapp-iwodd" })
         const credentials = Realm.Credentials.emailPassword(
             data.email,
             data.password
@@ -177,15 +189,10 @@ function LoginContent(props: {
     )
 }
 
-// async function linkAccounts(user: Realm.User, email: string, password: string) {
-//     const emailPasswordUserCredentials = Realm.Credentials.emailPassword(
-//       email,
-//       password
-//     );
-//     await user.linkCredentials(emailPasswordUserCredentials);
-//   }
-
-function RegisterContent(props: { setIsLogin: any }) {
+function RegisterContent(props: {
+    setIsLogin: any
+    // anonymousUser?: Realm.User
+}) {
     const {
         register,
         handleSubmit,
@@ -193,41 +200,33 @@ function RegisterContent(props: { setIsLogin: any }) {
     } = useForm<Inputs>()
     const [show, setShow] = useBoolean()
     console.log("errors: ", errors)
+    const app = useRealmApp()
 
     const onSubmit: SubmitHandler<Inputs> = async (data) => {
-        const app = new Realm.App({ id: "salvare-foodapp-iwodd" })
-
-        // `App.currentUser` updates to match the logged in user
-        // assert(user.id === app.currentUser.id);
+        console.log("app: ", app)
 
         try {
-            await app.emailPasswordAuth
-                .registerUser({
-                    email: data.email,
-                    password: data.password,
-                })
-                .then((user) => {
-                    console.log("user: ", user)
-                })
-
-            const credentials = Realm.Credentials.emailPassword(
-                data.email,
-                data.password
-            )
-
-            const currentUser = await app.logIn(credentials)
-            const mongodb = app.currentUser?.mongoClient("mongodb-atlas")
-
-            await mongodb?.db("salvare").collection("users").insertOne({
-                uid: currentUser?.id,
-                username: data.fullname,
+            await app.emailPasswordAuth.registerUser({
                 email: data.email,
-                favoriteRecipes: [],
+                password: data.password,
             })
+
+            // const linkedAccount = await linkAccounts(app.currentUser, data.email, data.password)
+            // console.log('linkedAccount: ', linkedAccount);
+
+            // const currentUser = await app.logIn(credentials)
+            // const mongodb = app.currentUser?.mongoClient("mongodb-atlas")
+
+            // await mongodb?.db("salvare").collection("users").insertOne({
+            //     uid: currentUser?.id,
+            //     username: data.fullname,
+            //     email: data.email,
+            //     favoriteRecipes: [],
+            // })
 
             props.setIsLogin.toggle()
         } catch (err) {
-            console.error("Failed to log in", err)
+            console.error("Failed to registering new user", err)
         }
     }
 
@@ -336,14 +335,7 @@ function RegisterContent(props: { setIsLogin: any }) {
 }
 
 export function LoginModal({ isOpen, onOpen, onClose }: ModalProps) {
-    // const users = mongodb?.db("salvare").collection("users")
-    // const anonymousUser = useMongoAnonymousConnect()
-    // console.log('anonymousUser: ', anonymousUser);
-
-    // realmConnect()
-    // const { data, ...rest } = useFetch()
-
-    // console.log("data: ", data, rest)
+    // useAnonymousLogin()
 
     const [isLogin, setIsLogin] = useBoolean(true)
 
@@ -351,7 +343,12 @@ export function LoginModal({ isOpen, onOpen, onClose }: ModalProps) {
         <Modal onClose={onClose} size="md" isOpen={isOpen}>
             <ModalOverlay />
             <LoginContent setIsLogin={setIsLogin} onClose={onClose} />
-            {!isLogin && <RegisterContent setIsLogin={setIsLogin} />}
+            {!isLogin && (
+                <RegisterContent
+                    // anonymousUser={anonymousUser}
+                    setIsLogin={setIsLogin}
+                />
+            )}
         </Modal>
     )
 }

@@ -48,7 +48,9 @@ export default function useFetch<T>(
     }
 
     useEffect(() => {
-        fetchData(url, options)
+        if (url) {
+            fetchData(url, options)
+        }
     }, [options, url])
 
     return {

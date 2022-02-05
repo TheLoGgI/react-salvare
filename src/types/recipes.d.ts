@@ -38,7 +38,7 @@ export type RecipiesIngredients = {
 export type RecipesDataHints = {
     recipe: {
         id?: string
-        uri: Url
+        uri: string
         label: string
         image: Url
         totalTime: number
@@ -95,7 +95,7 @@ export type RecipesData = {
     count: number
     _links: {
         next: {
-            href: Url
+            href: string
             title: "Next page" | string
         }
     }

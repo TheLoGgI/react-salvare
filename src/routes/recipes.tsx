@@ -15,6 +15,7 @@ import {
     UnorderedList,
 } from "@chakra-ui/react"
 import { faClock } from "@fortawesome/free-regular-svg-icons"
+import { faStar as faStarRegular } from "@fortawesome/free-regular-svg-icons"
 import {
     faConciergeBell,
     faFireAlt,
@@ -39,7 +40,6 @@ export default function Recipies() {
     const { id } = useParams()
     const navigate = useNavigate()
     const recipesData = useContext<RecipesData>(RecipesDataContext)
-    console.log("recipesData: ", recipesData)
     const [recipeAmount, setRecipeAmount] = useState(1)
     const [ingredientsList, setIngredientsList] = useState<ingredientsListType>(
         []
@@ -60,13 +60,6 @@ export default function Recipies() {
     const currentIngredient = recipesData.hits?.find(
         (hit) => hit.recipe.id === id
     )
-    console.log("currentIngredient: ", currentIngredient)
-
-    useEffect(() => {
-        if (currentIngredient === undefined) {
-            navigate("/")
-        }
-    }, [currentIngredient, navigate])
 
     useEffect(() => {
         if (currentIngredient !== undefined) {
@@ -169,27 +162,47 @@ export default function Recipies() {
                 w="100%"
                 gap="20"
             >
-                <Box width="70%">
+                <Box flexBasis={600} flexGrow={1}>
                     <Flex justify="space-between">
                         <Heading color="blue.50">{label}</Heading>
-                        <IconButton
-                            // colorScheme="teal"
-                            bg="#335563"
-                            aria-label="Print"
-                            size="lg"
-                            title="Print"
-                            isRound
-                            _hover={{ bg: "teal" }}
-                            icon={
-                                <FontAwesomeIcon
-                                    color="#1A2C33"
-                                    icon={faPrint}
-                                />
-                            }
-                            onClick={() => {
-                                window.print()
-                            }}
-                        />
+                        <HStack spacing={4}>
+                            <IconButton
+                                // colorScheme="teal"
+                                bg="#335563"
+                                aria-label="add to favorites"
+                                size="lg"
+                                title="add to favorites"
+                                isRound
+                                _hover={{ bg: "teal" }}
+                                icon={
+                                    <FontAwesomeIcon
+                                        color="#1A2C33"
+                                        icon={faStarRegular}
+                                    />
+                                }
+                                onClick={() => {
+                                    console.log("add to favorites")
+                                }}
+                            />
+                            <IconButton
+                                // colorScheme="teal"
+                                bg="#335563"
+                                aria-label="Print"
+                                size="lg"
+                                title="Print"
+                                isRound
+                                _hover={{ bg: "teal" }}
+                                icon={
+                                    <FontAwesomeIcon
+                                        color="#1A2C33"
+                                        icon={faPrint}
+                                    />
+                                }
+                                onClick={() => {
+                                    window.print()
+                                }}
+                            />
+                        </HStack>
                     </Flex>
                     <HStack spacing={6} mt="5">
                         <HStack spacing={2}>
@@ -328,7 +341,7 @@ export default function Recipies() {
                         </UnorderedList>
                     </Box>
                 </Box>
-                <Box width="50%" maxW={600}>
+                <Box minW={300} maxW={600} flexGrow={1}>
                     <Image
                         src={
                             pickLargesImage(
@@ -344,9 +357,8 @@ export default function Recipies() {
                             Per 100 g
                         </Text>
                         <Grid
-                            gap={4}
+                            gap={2}
                             gridTemplateColumns="repeat(auto-fill, minmax(200px, 1fr))"
-                            gridAutoRows="1fr 1fr"
                         >
                             <List color="blue.50">
                                 {primaryNutrients.map((nutrient, index) => (

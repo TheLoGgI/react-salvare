@@ -1,10 +1,14 @@
 import { IconButton } from "@chakra-ui/react"
-import { IconDefinition } from "@fortawesome/fontawesome-svg-core"
+import {
+    IconDefinition,
+    IconName,
+    IconPrefix,
+} from "@fortawesome/fontawesome-svg-core"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Link } from "react-router-dom"
 
 type MenuIconPropsType = {
-    icon: IconDefinition
+    icon: IconDefinition | [IconPrefix, IconName]
     to: string
     label?: string
     title: string

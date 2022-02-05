@@ -30,4 +30,5 @@ export type useFoodRequest<T> = Omit<
     "data"
 > & {
     data: T
+    next: () => void
 }
