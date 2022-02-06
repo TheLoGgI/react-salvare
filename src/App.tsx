@@ -1,150 +1,27 @@
-import "./css/logo.css"
+import { Box, useColorMode, useColorModeValue } from "@chakra-ui/react"
+import { BrowserRouter, Route, Routes } from "react-router-dom"
 
-import { Box, Button, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react"
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { useState } from "react"
-import { Link, Outlet, useParams } from "react-router-dom"
-
-import Card from "./components/Card"
-import Search from "./components/Search"
-import { useIngredientData, useRecipesData } from "./context/DataContext"
-import { SearchStateType } from "./types/search"
-
-function EmptySearchMessage() {
-    return (
-        <>
-            <Text fontSize="3xl" color="blue.50">
-                Find your ingredients or recipes for your next meal
-            </Text>
-            <Image src="recipies.example.png" alt="recipies example" />
-        </>
-    )
-}
+import Header from "./components/Header"
+import Discovery from "./routes/Discovery"
+import IngredientsPage from "./routes/ingredient"
+import ProfilPage from "./routes/profil"
+import RecipesPage from "./routes/recipes"
 
 function App() {
-    const { id } = useParams()
-    const [searchSettings, setSearchSettings] = useState<SearchStateType>({
-        searchInput: "",
-        selectedButton: "ingredients",
-    })
-    const { data, isFetching } = useIngredientData(searchSettings.searchInput)
-    const { data: recipiesData, next: nextRecipiePage } = useRecipesData(
-        searchSettings.searchInput,
-        true
-    )
-    // console.log("recipiesData: ", recipiesData)
-
-    function paginatePage() {
-        nextRecipiePage()
-    }
-
+    const bg = useColorModeValue("light.100", "teal.900")
     return (
-        <>
-            <Box as="main" maxW={1600} mx="auto" minH="100vh">
-                <Search
-                    isLoading={isFetching}
-                    searchSettings={searchSettings}
-                    setSearchSettings={setSearchSettings}
-                />
-
-                <Box p="4">
-                    {data?.length === 0 && recipiesData.hits.length === 0 && (
-                        <EmptySearchMessage />
-                    )}
-
-                    {!id ? (
-                        searchSettings.selectedButton === "ingredients" ? (
-                            <SimpleGrid
-                                autoColumns="true"
-                                columns={4}
-                                spacing={10}
-                            >
-                                {data?.map((item, index) => {
-                                    const label = item.food.label
-                                    const image = item.food.image
-                                    const id = item.food.foodId
-                                    return (
-                                        <Card
-                                            key={index + id}
-                                            pageLink={id}
-                                            image={image}
-                                            label={label}
-                                            alt={label}
-                                        />
-                                    )
-                                })}
-                            </SimpleGrid>
-                        ) : (
-                            <>
-                                <SimpleGrid
-                                    autoColumns="true"
-                                    columns={4}
-                                    spacing={10}
-                                >
-                                    {recipiesData.hits?.map((item, index) => {
-                                        const label = item.recipe.label
-                                        const image = item.recipe.image
-                                        const id = (
-                                            item.recipe.uri as unknown as string
-                                        ).split("#")[1]
-
-                                        return (
-                                            <Card
-                                                key={id + index}
-                                                pageLink={"recipes/" + id}
-                                                image={image}
-                                                label={label}
-                                                alt={label}
-                                            />
-                                        )
-                                    })}
-                                </SimpleGrid>
-                                {recipiesData.hits?.length !== 0 && (
-                                    <Button
-                                        colorScheme="teal"
-                                        size="lg"
-                                        mx="auto"
-                                        mt="8"
-                                        isLoading={isFetching}
-                                        onClick={paginatePage}
-                                        d="block"
-                                    >
-                                        Show more
-                                    </Button>
-                                )}
-                            </>
-                        )
-                    ) : (
-                        <Link to="/">
-                            <Flex align="center" gap="4">
-                                <FontAwesomeIcon
-                                    size="3x"
-                                    color="#B4DCEC"
-                                    icon={faArrowLeft}
-                                />
-                                <Text
-                                    fontSize="2xl"
-                                    verticalAlign="center"
-                                    color="white"
-                                >
-                                    Go back
-                                </Text>
-                            </Flex>
-                        </Link>
-                    )}
-                </Box>
-
-                <Outlet />
-            </Box>
-            <Box
-                w="100%"
-                h={400}
-                mt={200}
-                bgImage="url('salvaregrid.png')"
-                bgSize="100%"
-            ></Box>
-        </>
+        <BrowserRouter>
+            {/* <Box bg={bg}> */}
+            <Header />
+            <Routes>
+                <Route path="/" element={<Discovery />}>
+                    <Route path=":id" element={<IngredientsPage />} />
+                    <Route path="recipes/:id" element={<RecipesPage />} />
+                </Route>
+                <Route path="profil" element={<ProfilPage />} />
+            </Routes>
+            {/* </Box> */}
+        </BrowserRouter>
     )
 }
 

@@ -1,4 +1,4 @@
-import { IconButton } from "@chakra-ui/react"
+import { IconButton, useColorModeValue } from "@chakra-ui/react"
 import {
     IconDefinition,
     IconName,
@@ -20,6 +20,7 @@ export default function MenuIcon({
     label = "",
     title,
 }: MenuIconPropsType) {
+    // const text = useColorModeValue("#B4DCEC", "white")
     return (
         <Link className="menulink-symbol" to={to}>
             <IconButton
@@ -28,7 +29,7 @@ export default function MenuIcon({
                 size="lg"
                 title={title}
                 isRound
-                icon={<FontAwesomeIcon color="#B4DCEC" icon={icon} />}
+                icon={<FontAwesomeIcon icon={icon} />}
             />
         </Link>
     )

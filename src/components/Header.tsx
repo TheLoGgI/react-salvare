@@ -7,12 +7,12 @@ import {
     Popover,
     PopoverArrow,
     PopoverBody,
-    PopoverCloseButton,
     PopoverContent,
-    PopoverHeader,
     PopoverTrigger,
     Stack,
     Text,
+    useColorMode,
+    useColorModeValue,
     useDisclosure,
 } from "@chakra-ui/react"
 import {
@@ -32,20 +32,23 @@ export default function Header() {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const app = useRealmApp()
     const [isLoggedIn, setIsLoggedIn] = useState(app.currentUser?.isLoggedIn)
+    const { colorMode, toggleColorMode } = useColorMode()
+    console.log("colorMode: ", colorMode)
 
     useEffect(() => {
         setIsLoggedIn(app.currentUser?.isLoggedIn)
     }, [app.currentUser?.isLoggedIn])
 
     async function logout() {
-        const logout = await app.currentUser?.logOut()
+        await app.currentUser?.logOut()
         setIsLoggedIn(app.currentUser?.isLoggedIn)
     }
 
-    console.log("app: ", app)
+    const text = useColorModeValue("black", "white")
+
     return (
         <>
-            <Box as="header" bg="cyan.900">
+            <Box as="header">
                 <Flex
                     as="nav"
                     justify="space-between"
@@ -55,11 +58,17 @@ export default function Header() {
                     px={{ base: 4, "2xl": 10 }}
                 >
                     <Link to="/">
-                        <Box className="logo"></Box>
+                        <Text
+                            fontFamily="montserrat"
+                            fontSize="lg"
+                            fontWeight="bold"
+                        >
+                            Salvare
+                        </Text>
                     </Link>
 
                     <HStack spacing={4}>
-                        <Text color="white">
+                        <Text color={text}>
                             {app.currentUser?.profile.email}
                         </Text>
                         <MenuIcon
@@ -77,12 +86,7 @@ export default function Header() {
                                         size="lg"
                                         title="Profil"
                                         isRound
-                                        icon={
-                                            <FontAwesomeIcon
-                                                color="#B4DCEC"
-                                                icon={faUser}
-                                            />
-                                        }
+                                        icon={<FontAwesomeIcon icon={faUser} />}
                                     />
                                 </PopoverTrigger>
                                 <PopoverContent>
@@ -98,6 +102,12 @@ export default function Header() {
                                                     Profil
                                                 </Button>
                                             </Link>
+                                            <Button onClick={toggleColorMode}>
+                                                Toggle{" "}
+                                                {colorMode === "light"
+                                                    ? "Dark"
+                                                    : "Light"}
+                                            </Button>
                                             <Button
                                                 variant="link"
                                                 onClick={logout}
@@ -116,12 +126,7 @@ export default function Header() {
                                 size="lg"
                                 onClick={onOpen}
                                 isRound
-                                icon={
-                                    <FontAwesomeIcon
-                                        color="#B4DCEC"
-                                        icon={faSignInAlt}
-                                    />
-                                }
+                                icon={<FontAwesomeIcon icon={faSignInAlt} />}
                             />
                         )}
                     </HStack>

@@ -160,7 +160,6 @@ function LoginContent(props: {
                         </Box>
                     </Stack>
                     <Input
-                        bg="teal"
                         color="white"
                         w="full"
                         type="submit"
@@ -174,7 +173,6 @@ function LoginContent(props: {
                 <Flex justify="center" w="full">
                     <Button
                         as="a"
-                        colorScheme="teal"
                         variant="ghost"
                         w="full"
                         mr={3}
@@ -305,7 +303,6 @@ function RegisterContent(props: {
                         </Box>
                     </Stack>
                     <Input
-                        bg="teal"
                         color="white"
                         w="full"
                         type="submit"
