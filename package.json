@@ -3,6 +3,8 @@
     "version": "0.1.0",
     "private": true,
     "dependencies": {
+        "@capacitor/android": "^3.4.0",
+        "@capacitor/core": "^3.4.0",
         "@chakra-ui/react": "^1.7.3",
         "@emotion/react": "^11.7.1",
         "@emotion/styled": "^11.6.0",
@@ -60,6 +62,7 @@
         ]
     },
     "devDependencies": {
+        "@capacitor/cli": "^3.4.0",
         "ts-node": "^10.4.0"
     }
 }

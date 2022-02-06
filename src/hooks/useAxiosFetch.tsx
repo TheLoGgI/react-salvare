@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig, Method, Requ } from "axios"
+import axios from "axios"
 import { useEffect, useState } from "react"
 
 import { useFetchType } from "../types/useFetch"
