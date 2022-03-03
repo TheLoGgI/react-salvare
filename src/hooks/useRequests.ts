@@ -16,6 +16,8 @@ type PaginationDetails = {
 const RECIPES_API_ID = process.env.REACT_APP_API_RECIPES_ID
 const RECIPES_API_KEY = process.env.REACT_APP_API_RECIPES_KEY
 
+const fetchOptions: RequestInit = { method: "GET", mode: "cors" }
+
 export function useRecipies(
     search: string,
     accumaltivePagination: boolean
@@ -24,10 +26,6 @@ export function useRecipies(
         Map<string, Array<RecipesDataHints[]>>
     >(new Map())
     const [recipieUrl, setRecipieUrl] = useState<string>("")
-
-    const fetchOptions: RequestInit = useMemo(() => {
-        return { method: "GET", mode: "cors" }
-    }, [])
 
     const { data: recipiesData, ...rest } = useFetch<RecipesData>(
         recipieUrl,

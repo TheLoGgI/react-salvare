@@ -1,5 +1,3 @@
-import assert from "assert"
-
 import {
     Box,
     Button,
@@ -90,7 +88,12 @@ function LoginContent(props: {
         )
 
         try {
-            await app.logIn(credentials)
+            const user = await app.logIn(credentials)
+            const insertUser = await user.functions.insertUser({
+                username: "username",
+                email: data.email,
+            })
+            console.log("insertUser: ", insertUser)
             props.onClose()
         } catch (err) {
             setError("email", {
@@ -209,18 +212,22 @@ function RegisterContent(props: {
                 password: data.password,
             })
 
+            // TODO: sync user with realm
+
             // const linkedAccount = await linkAccounts(app.currentUser, data.email, data.password)
             // console.log('linkedAccount: ', linkedAccount);
 
             // const currentUser = await app.logIn(credentials)
             // const mongodb = app.currentUser?.mongoClient("mongodb-atlas")
 
-            // await mongodb?.db("salvare").collection("users").insertOne({
-            //     uid: currentUser?.id,
-            //     username: data.fullname,
-            //     email: data.email,
-            //     favoriteRecipes: [],
-            // })
+            // console.log(
+            //     await mongodb?.db("salvare").collection("users").insertOne({
+            //         // uid: currentUser?.id,
+            //         username: data.fullname,
+            //         email: data.email,
+            //         favoriteRecipes: [],
+            //     })
+            // )
 
             props.setIsLogin.toggle()
         } catch (err) {
@@ -303,8 +310,8 @@ function RegisterContent(props: {
                         </Box>
                     </Stack>
                     <Input
-                        color="white"
                         w="full"
+                        bg="buttonSubmit"
                         type="submit"
                         value="Register"
                         mt="8"
@@ -335,6 +342,7 @@ export function LoginModal({ isOpen, onOpen, onClose }: ModalProps) {
     // useAnonymousLogin()
 
     const [isLogin, setIsLogin] = useBoolean(true)
+    const [isPopoverOpen, setIsPopoverOpen] = useBoolean(false)
 
     return (
         <Modal onClose={onClose} size="md" isOpen={isOpen}>

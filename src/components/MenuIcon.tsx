@@ -1,4 +1,4 @@
-import { IconButton, useColorModeValue } from "@chakra-ui/react"
+import { IconButton } from "@chakra-ui/react"
 import {
     IconDefinition,
     IconName,
@@ -20,15 +20,16 @@ export default function MenuIcon({
     label = "",
     title,
 }: MenuIconPropsType) {
-    // const text = useColorModeValue("#B4DCEC", "white")
     return (
-        <Link className="menulink-symbol" to={to}>
+        <Link to={to}>
             <IconButton
-                colorScheme="teal"
                 aria-label={label}
                 size="lg"
                 title={title}
                 isRound
+                color="buttonIcon"
+                bg={"buttonBg"}
+                _hover={{ bg: "buttonBgHover" }}
                 icon={<FontAwesomeIcon icon={icon} />}
             />
         </Link>

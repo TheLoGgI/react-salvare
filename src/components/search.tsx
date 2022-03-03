@@ -1,5 +1,4 @@
 import {
-    Button,
     Flex,
     FormControl,
     FormLabel,
@@ -13,8 +12,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import React, { useState } from "react"
 
 import { SearchInputProps, UnionActionType } from "../types/search"
+import { Button } from "."
 
-function Search({ setSearchSettings, isLoading }: SearchInputProps) {
+function Search({
+    searchSettings,
+    setSearchSettings,
+    isLoading,
+}: SearchInputProps) {
     const ACTIONS = {
         INGREDIENTS: "ingredients",
         RECIPIES: "recipies",
@@ -37,17 +41,9 @@ function Search({ setSearchSettings, isLoading }: SearchInputProps) {
         <HStack spacing={4} p={[2, 4]}>
             <Stack spacing={4} direction="row">
                 <Button
-                    colorScheme="teal"
                     height={16}
                     leftIcon={<FontAwesomeIcon icon={faCarrot} />}
-                    bg={
-                        buttonState === ACTIONS.INGREDIENTS
-                            ? "teal"
-                            : "teal.800"
-                    }
-                    fontWeight={
-                        buttonState === ACTIONS.INGREDIENTS ? "bold" : "initial"
-                    }
+                    isActive={buttonState === ACTIONS.INGREDIENTS}
                     onClick={() =>
                         searchToggle(ACTIONS.INGREDIENTS as UnionActionType)
                     }
@@ -55,13 +51,9 @@ function Search({ setSearchSettings, isLoading }: SearchInputProps) {
                     <Text ml="4">Ingredients</Text>
                 </Button>
                 <Button
-                    colorScheme="teal"
                     height={16}
                     leftIcon={<FontAwesomeIcon icon={faUtensils} />}
-                    bg={buttonState === ACTIONS.RECIPIES ? "teal" : "teal.800"}
-                    fontWeight={
-                        buttonState === ACTIONS.RECIPIES ? "bold" : "initial"
-                    }
+                    isActive={buttonState === ACTIONS.RECIPIES}
                     onClick={() =>
                         searchToggle(ACTIONS.RECIPIES as UnionActionType)
                     }
@@ -81,15 +73,14 @@ function Search({ setSearchSettings, isLoading }: SearchInputProps) {
                 <HStack>
                     <FormControl>
                         <Flex flexDirection="column">
-                            <FormLabel htmlFor="search" color="blue.50" m="0">
-                                Search Ingredients
+                            <FormLabel htmlFor="search" color="text" m="0">
+                                Search {searchSettings?.selectedButton}
                             </FormLabel>
                             <Input
                                 id="search"
                                 type="search"
-                                bg="teal.800"
+                                bg="buttonBg"
                                 border="none"
-                                color="blue.100"
                                 flexGrow={1}
                                 maxW={400}
                                 value={inputValue}
@@ -99,11 +90,13 @@ function Search({ setSearchSettings, isLoading }: SearchInputProps) {
                     </FormControl>
                     <Button
                         mt={4}
-                        colorScheme="teal"
                         isLoading={isLoading}
                         cursor="pointer"
                         alignSelf="flex-end"
+                        bg="buttonSubmit"
+                        color="black"
                         type="submit"
+                        _hover={{ bg: "buttonSubmitHover" }}
                     >
                         Search
                     </Button>
